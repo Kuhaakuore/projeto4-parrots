@@ -104,7 +104,7 @@ function verifyVictory() {
         alert(`Você ganhou em ${movesCounter} jogadas! A duração do jogo foi de ${time} segundos!`);
         let answer = prompt("Você gostaria de reiniciar a partida? Por favor responda apenas com 'sim' ou 'não'");
         while (answer !== "sim" && answer !== "não") {
-            answer = prompt("Você gostaria de reiniciar a partida? Por favor responda apenas com 'sim' ou 'não'");
+            answer = prompt("Você gostaria de reiniciar a partida? (sim ou não)");
         }
         if (answer === "sim") {
             resetTime();
