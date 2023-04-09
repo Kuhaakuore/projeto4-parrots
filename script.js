@@ -102,7 +102,7 @@ function verifyVictory() {
     if (successesCounter === cardsNumber/2) {
         clearInterval(timerId);
         alert(`Você ganhou em ${movesCounter} jogadas! A duração do jogo foi de ${time} segundos!`);
-        let answer = prompt("Você gostaria de reiniciar a partida? Por favor responda apenas com 'sim' ou 'não'");
+        let answer = prompt("Você gostaria de reiniciar a partida? (sim ou não)");
         while (answer !== "sim" && answer !== "não") {
             answer = prompt("Você gostaria de reiniciar a partida? (sim ou não)");
         }
