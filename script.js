@@ -1,7 +1,11 @@
-let cardsNumber = 4;
+let cardsNumber = 8;
 let firstCard = null;
 let secondCard = null;
 let firstCardSrc = '';
+let movesCounter = 0;
+let successesCounter = 0;
+let time = 0;
+let timerId = null;
 
 const cardsContainer = document.querySelector(".cards-container");
 const cards = ["./media/images/bobrossparrot.gif",
@@ -12,6 +16,17 @@ const cards = ["./media/images/bobrossparrot.gif",
     "./media/images/tripletsparrot.gif",
     "./media/images/unicornparrot.gif"
 ];
+const timer = document.querySelector(".timer");
+
+function increaseTime() {
+    time++;
+    timer.innerHTML = time;
+}
+
+function resetTime() {
+    time = 0;
+    timer.innerHTML = time;
+}
 
 function comparador() {
     return Math.random() - 0.5;
@@ -19,10 +34,10 @@ function comparador() {
 
 function getCardNumber() {
     cardsNumber = prompt("Bem vindo! Com quantas cartas você deseja jogar?");
-    cardsNumber = 14;
     while ((cardsNumber % 2 !== 0) || ((cardsNumber < 4) || (cardsNumber > 14))) {
         cardsNumber = prompt("Bem vindo! Com quantas cartas você deseja jogar?");
     }
+    placeCards();
 }
 
 function placeCards() {
@@ -38,10 +53,10 @@ function placeCards() {
             for (j = 0; j < cardsNumber / 2; j++) {
                 cardsContainer.innerHTML += `<div class="card" data-test="card" onclick="turnCard(this)">
                 <div class="back-face face">
-                  <img src="./media/images/back.png" alt=""">
+                  <img src="./media/images/back.png" alt="" data-test="face-down-image"">
                 </div>
                 <div class="front-face face">
-                  <img src="${selectedCards[j]}" alt=""">
+                  <img src="${selectedCards[j]}" alt="" data-test="face-up-image"">
                 </div>
               </div>`;
             }
@@ -51,17 +66,18 @@ function placeCards() {
         for (i = 0; i < 2; i++) {
             cards.sort(comparador);
             for (j = 0; j < cardsNumber / 2; j++) {
-                cardsContainer.innerHTML += `<div class="card" data-test="card">
+                cardsContainer.innerHTML += `<div class="card" data-test="card" onclick="turnCard(this)">
                 <div class="back-face face">
-                  <img src="./media/images/back.png" alt=""">
+                  <img src="./media/images/back.png" alt="" data-test="face-down-image" ">
                 </div>
                 <div class="front-face face">
-                  <img src="${cards[j]}" alt=""">
+                  <img src="${cards[j]}" alt="" data-test="face-up-image"">
                 </div>
               </div>`;
             }
         }
     }
+    timerId = setInterval(increaseTime, 1000);
 }
 
 function wrongChoice() {
@@ -75,6 +91,28 @@ function wrongChoice() {
     secondCard = null;
 }
 
+function rightChoice () {
+    firstCardSrc = '';
+    firstCard = null;
+    secondCard = null;
+    successesCounter++;
+}
+
+function verifyVictory() {
+    if (successesCounter === cardsNumber/2) {
+        clearInterval(timerId);
+        alert(`Você ganhou em ${movesCounter} jogadas! A duração do jogo foi de ${time} segundos!`);
+        let answer = prompt("Você gostaria de reiniciar a partida? Por favor responda apenas com 'sim' ou 'não'");
+        while (answer !== "sim" && answer !== "não") {
+            answer = prompt("Você gostaria de reiniciar a partida? Por favor responda apenas com 'sim' ou 'não'");
+        }
+        if (answer === "sim") {
+            resetTime();
+            getCardNumber();
+        }
+    }
+}
+
 function turnCard(card) {
     if (!card.classList.contains("turned")) {
         if (firstCard === null) {
@@ -85,6 +123,7 @@ function turnCard(card) {
             const frontFace = card.querySelector(".front-face");
             backFace.classList.toggle("back");
             frontFace.classList.toggle("front");
+            movesCounter++;
         } else if (secondCard === null) {
             card.classList.add("turned");
             secondCard = card;
@@ -93,17 +132,13 @@ function turnCard(card) {
             backFace.classList.toggle("back");
             frontFace.classList.toggle("front");
             if (card.querySelector(".front-face img").src === firstCardSrc) {
-                firstCardSrc = '';
-                firstCard = null;
-                secondCard = null;
+                rightChoice();
+                movesCounter++;
+                setTimeout(verifyVictory, 100);
             } else {
+                movesCounter++;
                 setTimeout(wrongChoice, 1000);
             }
         }
     }
-    else {
-        console.log("Fuck");
-    }
 }
-
-placeCards();
