@@ -39,20 +39,19 @@ body {
 }
 
 .row {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .card {
+  position: relative;
   width: 117px;
   height: 146px;
-  background: #a7e9af;
-  border: 1px solid #99cea8;
-  border-radius: 5px;
   margin: 0 17px 34px 17px;
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
 .card img {
@@ -60,15 +59,33 @@ body {
   height: 100px;
 }
 
-.show-img {
-  display: initial;
+.face {
+  width: 100%;
+  height: 100%;
+  background: #a7e9af;
+  border: 1px solid #99cea8;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  backface-visibility: hidden;
+  transition: all .5s;
+  transform-style: preserve-3d;
 }
 
-.hide-img {
-  display: none;
+.front-face {
+  transform: rotateY(180deg);
 }
 
-@media (max-width: 336px) {
+.front {
+  transform: rotateY(0deg);
+}
+.back {
+  transform: rotateY(-180deg);
+}
+
+@media (max-width: 500px) {
   .content-container {
     width: 100%;
   }

@@ -1,4 +1,8 @@
-let cardsNumber = 6;
+let cardsNumber = 4;
+let firstCard = null;
+let secondCard = null;
+let firstCardSrc = '';
+
 const cardsContainer = document.querySelector(".cards-container");
 const cards = ["./media/images/bobrossparrot.gif",
     "./media/images/explodyparrot.gif",
@@ -32,10 +36,14 @@ function placeCards() {
         for (i = 0; i < 2; i++) {
             selectedCards.sort(comparador);
             for (j = 0; j < cardsNumber / 2; j++) {
-                cardsContainer.innerHTML += `<div class="card" data-test="card">
-                                                <img src="./media/images/back.png" alt="" class="show-img"">
-                                                <img src="${selectedCards[j]}" alt="" class="hide-img"">
-                                            </div>`;
+                cardsContainer.innerHTML += `<div class="card" data-test="card" onclick="turnCard(this)">
+                <div class="back-face face">
+                  <img src="./media/images/back.png" alt=""">
+                </div>
+                <div class="front-face face">
+                  <img src="${selectedCards[j]}" alt=""">
+                </div>
+              </div>`;
             }
         }
     }
@@ -44,11 +52,57 @@ function placeCards() {
             cards.sort(comparador);
             for (j = 0; j < cardsNumber / 2; j++) {
                 cardsContainer.innerHTML += `<div class="card" data-test="card">
-                                                <img src="./media/images/back.png" alt="" class="show-img"">
-                                                <img src="${cards[j]}" alt="" class="hide-img"">
-                                            </div>`;
+                <div class="back-face face">
+                  <img src="./media/images/back.png" alt=""">
+                </div>
+                <div class="front-face face">
+                  <img src="${cards[j]}" alt=""">
+                </div>
+              </div>`;
             }
         }
+    }
+}
+
+function wrongChoice() {
+    firstCard.querySelector(".back-face").classList.toggle("back");
+    firstCard.querySelector(".front-face").classList.toggle("front");
+    secondCard.querySelector(".back-face").classList.toggle("back");
+    secondCard.querySelector(".front-face").classList.toggle("front");
+    firstCard.classList.remove("turned");
+    secondCard.classList.remove("turned");
+    firstCard = null;
+    secondCard = null;
+}
+
+function turnCard(card) {
+    if (!card.classList.contains("turned")) {
+        if (firstCard === null) {
+            card.classList.add("turned");
+            firstCard = card;
+            firstCardSrc = card.querySelector(".front-face img").src;
+            const backFace = card.querySelector(".back-face");
+            const frontFace = card.querySelector(".front-face");
+            backFace.classList.toggle("back");
+            frontFace.classList.toggle("front");
+        } else if (secondCard === null) {
+            card.classList.add("turned");
+            secondCard = card;
+            const backFace = card.querySelector(".back-face");
+            const frontFace = card.querySelector(".front-face");
+            backFace.classList.toggle("back");
+            frontFace.classList.toggle("front");
+            if (card.querySelector(".front-face img").src === firstCardSrc) {
+                firstCardSrc = '';
+                firstCard = null;
+                secondCard = null;
+            } else {
+                setTimeout(wrongChoice, 1000);
+            }
+        }
+    }
+    else {
+        console.log("Fuck");
     }
 }
 
