@@ -49,11 +49,6 @@ body {
   padding: 0 5%;
 }
 
-.row {
-  display: flex;
-  justify-content: center;
-}
-
 .card {
   position: relative;
   width: 117px;

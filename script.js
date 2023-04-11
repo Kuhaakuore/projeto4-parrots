@@ -1,4 +1,4 @@
-let cardsNumber = 8;
+let cardsNumber = 0;
 let firstCard = null;
 let secondCard = null;
 let firstCardSrc = '';
@@ -17,6 +17,14 @@ const cards = ["./media/images/bobrossparrot.gif",
     "./media/images/unicornparrot.gif"
 ];
 const timer = document.querySelector(".timer");
+
+function resetVariables() {
+    firstCardSrc = '';
+    firstCard = null;
+    secondCard = null;
+    successesCounter = 0;
+    movesCounter = 0;
+}
 
 function increaseTime() {
     time++;
@@ -108,6 +116,7 @@ function verifyVictory() {
         }
         if (answer === "sim") {
             resetTime();
+            resetVariables();
             getCardNumber();
         }
     }
